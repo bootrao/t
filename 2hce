@@ -1,0 +1,1859 @@
+第二章 产品信息
+2.1 驱动器介绍
+2.1.1 名牌与型号说明
+待补充，见硬件随机手册
+2.1.2 驱动器组成
+待补充，见硬件随机手册
+2.1.3 系统配线图
+待补充，见硬件随机手册
+第三章 安装说明
+3.1 驱动器的安装
+3.1.1 安装场所
+待补充，见硬件随机手册
+3.1.2 环境条件
+待补充，见硬件随机手册
+3.1.3 安装注意事项
+待补充，见硬件随机手册
+第四章 配线
+待补充，见硬件随机手册
+第五章 面板显示
+5.1 面板组成介绍
+AM600-2HCE的面板由电源指示灯、模块状态指示灯、通道脉冲输入指示灯和通道IO指示灯几部分组成。
+ 
+名称	基本功能
+PWR	电源指示灯，当模块24V供电之后常亮
+RUN	模块状态指示灯，表示EtherCAT通信状态机状态
+SF	模块状态指示灯，表示模块故障状态
+ERR	模块状态指示灯，表示EtherCAT通信故障状态
+A0	通道脉冲输入指示灯，Ch0通道A0信号端子电平状态
+B0	通道脉冲输入指示灯，Ch0通道B0信号端子电平状态
+Z0	通道脉冲输入指示灯，Ch0通道Z0信号端子电平状态
+A1	通道脉冲输入指示灯，Ch1通道A1信号端子电平状态
+B1	通道脉冲输入指示灯，Ch1通道B1信号端子电平状态
+Z1	通道脉冲输入指示灯，Ch1通道Z1信号端子电平状态
+X00	通道IO指示灯，Ch0通道数字量输入端子X00输入电平状态
+X01	通道IO指示灯，Ch0通道数字量输入端子X01输入电平状态
+X02	通道IO指示灯，Ch0通道数字量输入端子X02输入电平状态
+X03	通道IO指示灯，Ch0通道数字量输入端子X03输入电平状态
+X10	通道IO指示灯，Ch1通道数字量输入端子X10输入电平状态
+X11	通道IO指示灯，Ch1通道数字量输入端子X11输入电平状态
+X12	通道IO指示灯，Ch1通道数字量输入端子X12输入电平状态
+X13	通道IO指示灯，Ch1通道数字量输入端子X13输入电平状态
+Y00	通道IO指示灯，Ch0通道数字量输出端子Y00输出电平状态
+Y01	通道IO指示灯，Ch0通道数字量输出端子Y01输出电平状态
+Y02	通道IO指示灯，Ch0通道数字量输出端子Y02输出电平状态
+Y10	通道IO指示灯，Ch1通道数字量输出端子Y10输出电平状态
+Y11	通道IO指示灯，Ch1通道数字量输出端子Y11输出电平状态
+Y12	通道IO指示灯，Ch1通道数字量输出端子Y12输出电平状态
+
+5.2 面板显示
+灭
+ 
+快闪
+ 
+闪烁
+ 
+单闪
+ 
+双闪
+ 
+亮
+ 
+5.2.1 电源指示灯
+PWR：电源指示灯
+名称	功能描述
+PWR	灭：24V未供电
+亮：24V已供电
+5.2.2 模块状态指示灯
+RUN
+RUN LED	描述
+灭	ECT模块处于INIT状态
+闪烁	ECT模块处于Pre-Operational状态
+单闪	ECT模块处于Safe-Operational状态
+亮	ECT模块处于Operational状态
+快闪	ECT模块处于bootstrap状态
+ERR
+ERR LED	描述
+灭	EtherCAT通信处于正常状态
+闪烁	EtherCAT通信就接受到无法执行的状态转换指令
+单闪	ECT模块同步错误
+双闪	EtherCAT通信发生watchdog错误
+SF灯
+SF LED	描述
+灭	模块无故障
+单闪	模块故障通道
+亮	EtherCAT断线
+5.2.3 通道脉冲输入指示灯
+脉冲通道输入指示灯和脉冲输入端子的实际输入电平有关，以A0为例，时序逻辑如下：
+ 
+5.2.4 通道IO指示灯
+每个通道配置4个数字两个输入端子和3个数字量输出端子，每一个IO端子配置一个指示灯，该指示灯只和端子的输入输出电平有关，以X00端子为例。
+ 
+第六章 通信网络配置
+ 
+6.1 EtherCAT协议概述
+EtherCAT 是一项高性能、低成本、应用简易、拓扑灵活的工业以太网技术，可用于工业现场级的超高速I/O 网络，
+使用标准的以太网物理层，传输媒体双绞线或光纤(100Base-TX 或100Base-FX)。
+EtherCAT 系统由主站、从站组成。主站实现只需要一张普通的网卡，从站需专用的从站控制芯片，如：ET1100、ET1200、FPGA 等。
+EtherCAT 一网到底，协议处理直达I/O 层：
+- 无需任何下层子总线
+- 无网关延迟
+- 单一系统即可涵盖所有设备：
+● 输入输出，传感器，执行器，驱动，显示…
+- 传输速率:
+● 2 x 100 Mbit/s ( 高速以太网 , 全双工模式 )
+- 同步性：两设备间距300 个节点，线缆长度120 米，同步抖动小于1us
+- 刷新时间：
+● 256 数字量 I/O：11 μs
+● 分布于 100 节点的 1000 开关量 I/O：30 μs = 0.03 ms
+● 200 模拟量 I/O (16 bit) ：50 μs, 采样率 20 kHz
+● 100 伺服轴 ( 每个 8 Byte IN+OUT) ： 100 μs = 0.1 ms
+● 12000 数字量 I/O： 350 μs
+为了支持更多种类的设备以及更广泛的应用层，EtherCAT 建立了以下应用协议：
+- CoE（基于 EtherCAT 的 CAN 应用协议）
+- SoE（符合 IEC 61800-7-204 标准的伺服驱动行规）
+- EoE（EtherCAT 实现以太网）
+- FoE（EtherCAT 实现文件读取）
+从站设备无需支持所有的通信协议，相反，只需选择最适合其应用的通信协议即可。
+6.2 EtherCAT通信基础
+6.2.1 EtherCAT 通信规范
+项目	规格
+通信协议	IEC 61158 Type 12, IEC 61800-7
+应用层	SDO	SDO 请求、SDO 应答
+	PDO	可变PDO 映射
+	FoE	远程在线升级
+物理层	传输协议	100BASE-TX (IEEE802.3)
+	最大距离	100M
+	接口	RJ45 * 2 ( INT、OUT)
+6.2.2 通信结构
+使用EtherCAT 通信可以有多种的应用层协议，下图是基于CANOpen 应用层的EtherCAT 通信结构。
+ 
+结构图中，在应用层对象字典里包含了：通信参数、应用程序数据，以及PDO的映射数据等。PDO过程数据对象，包含了伺服驱动器运行过程中的实时数据，且以周期性地进行读写访问。SDO 邮箱通信，则以非周期性的对一些通信参数对象、PDO 过程数据对象，进行访问修改。
+6.2.3 状态机
+以下为EtherCAT 状态转换框图：
+ 
+EtherCAT 设备必须支持4 种状态，负责协调主站和从站应用程序在初始化和运行时的状态关系。
+Init：初始化，简写为I；
+Pre-Operational：预运行，简写为P；
+Safe- Operational：安全运行，简写为S；
+Operational：运行，简写为O。
+从初始化状态向运行状态转化时，必须按照“初始化-> 预运行->  安全运行->  运行”的顺序转化，不可以越级。
+从运行状态返回时可以越级转化。状态的转化操作和初始化过程如下表：
+状态和状态转化	操作
+初始化(I)	应用层没有通信，主站只能读写ESC 寄存器
+IP	主站配置从站站点地址；
+配置邮箱通道；
+配置DC 分布时钟；
+请求“预运行”状态。
+预运行(P)	应用层邮箱数据通信 (SDO)
+PS	主站使用邮箱初始化过程数据映射；
+主站配置过程数据通信使用的SM 通道；
+主站配置FMMU；
+请求“安全状态”。
+安全运行(S)	有过程数据通信，但是只允许读输入数据，不产生输出信号
+(SDO、TPDO)
+SO	主站发送有效的输出数据；
+以请求“运行状态”。
+运行状态 (O)	输入和输出全部有效；
+仍然可以使用邮箱通信。
+(SDO、TPDO、RPDO)
+
+6.2.4 过程数据PDO
+PDO 实时过程数据的传输，遵循生产者- 消费者模型。PDO 可分为RPDO(Reception PDO)，从站通过RPDO 接收主站的指令；和TPDO(Trasmission PDO)，从站通过TPDO 反馈自身的状态。
+ 
+1） PDO映射参数
+PDO 映射用于建立对象字典与PDO 的映射关系。1600h~17FFh 为RPDO，1A00h~1BFFh 为TPDO，AM600-2HCE模块具有4个RPDO 和10个TPDO 可供选用，如下表所示：
+RPDO
+（4个）	1700h 1710h	可变映射
+	1701h 1711h	固定映射
+TPDO
+（10个）	1B00h 1B10h	可变映射
+	1B01h~1B04h  1B11~1B14h	固定映射
+a) 固定PDO映射
+AM600-2HCE提供了2个固定的RPDO和8个固定的TPDO供使用，列表如下：
+1701h
+Ch0 RPDO Mapping parameter 1	映射对象(4个12字节)
+	7004h:01（Ch0比较输出通道1比较值）
+7005h:01（Ch0比较输出通道2比较值）
+7006h:01（Ch0比较输出通道1有效电平时间）
+7007h:01（Ch0比较输出通道2有效电平时间）
+1711h
+Ch1 RPDO Mapping parameter 1	映射对象(4个12字节)
+	7004h:02（Ch1比较输出通道1比较值）
+7005h:02（Ch1比较输出通道2比较值）
+7006h:02（Ch1比较输出通道1有效电平时间）
+7007h:02（Ch1比较输出通道2有效电平时间）
+1B01h
+Ch0 touch probe pos value TPDO mapping parameter	映射对象(3个10字节)
+	6004h:01(Ch0探针状态)
+6005h:01（Ch0探针1上升沿锁存计数值）
+6007h:01（Ch0探针2上升沿锁存计数值）
+1B11h
+Ch1 touch probe pos value TPDO mapping parameter	映射对象(3个10字节)
+	6004h:02（Ch1探针状态）
+6005h:02（Ch1探针1上升沿锁存计数值）
+6007h:02（Ch1探针2上升沿锁存计数值）
+1B02h
+Ch0 touch probe neg value TPDO mapping parameter	映射对象(2个8字节)
+	6006h:01（Ch0探针1下降沿锁存计数值）
+6008h:01（Ch0探针2下降沿锁存计数值）
+1B12h
+Ch1 touch probe neg value TPDO mapping parameter	映射对象(2个8字节)
+	6006h:02（Ch1探针1下降沿锁存计数值）
+6008h:02（Ch1探针2下降沿锁存计数值）
+1B03h
+Ch0 touch probe pos time stamp TPDO mapping parameter	映射对象(4个16字节)
+	600Ah:01（Ch0探针1上升沿锁存DC时钟低32位）
+600Ah:02（Ch0探针1上升沿锁存DC时钟高32位）
+600Ch:01（Ch0探针2上升沿锁存DC时钟低32位）
+600Ch:02（Ch0探针2上升沿锁存DC时钟高32位）
+1B13h
+Ch1 touch probe pos time stamp TPDO mapping parameter	映射对象(4个16字节)
+	600Ah:03（Ch1探针1上升沿锁存DC时钟低32位）
+600Ah:04（Ch1探针1上升沿锁存DC时钟高32位）
+600Ch:03（Ch1探针2上升沿锁存DC时钟低32位）
+600Ch:04（Ch1探针2上升沿锁存DC时钟高32位）
+1B04h
+Ch0 touch probe neg time stamp TPDO mapping parameter	映射对象(4个16字节)
+	600Bh:01（Ch0探针1下降沿锁存DC时钟低32位）
+600Bh:02（Ch0探针1下降沿锁存DC时钟高32位）
+600Dh:01（Ch0探针2下降沿锁存DC时钟低32位）
+600Dh:02（Ch0探针2下降沿锁存DC时钟高32位）
+1B14h
+Ch1 touch probe neg time stamp TPDO mapping parameter	映射对象(4个16字节)
+	600Bh:03（Ch1探针1下降沿锁存DC时钟低32位）
+600Bh:04（Ch1探针1下降沿锁存DC时钟高32位）
+600Dh:03（Ch1探针2下降沿锁存DC时钟低32位）
+600Dh:04（Ch1探针2下降沿锁存DC时钟高32位）
+b） 可变PDO 映射
+AM600-2HCE 提供了2 个可变的RPDO 和2 个可变的TPDO 供用户使用。
+可变PDO	索引	最大映射个数	默认映射对象
+RDPO0	1700h	15	7000h:01（Ch0通道控制字）
+7001h:01（Ch0通道计数器预设值）
+7002h:01（Ch0通道探针功能控制字）
+7003h:01（Ch0通道数字量输出控制字）
+RDPO1	1710h	15	7000h:02（Ch1通道控制字）
+7001h:02（Ch1通道计数器预设值）
+7002h:02（Ch1通道探针功能控制字）
+7003h:02（Ch1通道数字量输出控制字）
+TPDO0	1B00h	15	6000h:01（Ch0通道状态字）
+6002h:01（Ch0通道计数器当前值）
+6003h:01（Ch0通道输入脉冲个频率值）
+6001h:01（Ch0通道数字量输入状态）
+600Eh:01（Ch0通道数字量输出状态）
+TPDO1	1B10h	15	6000h:02（Ch1通道状态字）
+6002h:02（Ch1通道计数器当前值）
+6003h:02（Ch1通道输入脉冲个频率值）
+6001h:02（Ch1通道数字量输入状态）
+600Eh:02（Ch1通道数字量输出状态）
+2） 同步管理PDO 分配设置
+EtherCAT 周期性数据通信中，过程数据可以包含多个PDO 映射数据对象，CoE 协议使用的数据对象0x1C10 ~ 0x1C2F 定义相应的SM( 同步管理通道) 的PDO 映射对象列表，多个PDO 可以映射在不同的子索引里，在AM600-2HCE模块中，支持最多4个RPDO 分配和10 个TPDO 分配，如下表所示：
+A）RPDO分配
+索引	子索引	默认值
+1C12	1	1700h
+1C12	2	1710h
+1C12	3	-
+1C12	4	-
+B）TPDO分配
+索引	子索引	默认值
+1C13	1	1B00
+1C13	2	1B10
+1C13	3	-
+1C13	4	-
+1C13	5	-
+1C13	6	-
+1C13	7	-
+1C13	8	-
+1C13	9	-
+1C13	19	-
+3） PDO 配置
+PDO 映射参数包含指向PDO 需要发送或者接收到的PDO 对应的过程数据的指针，包括索引、子索引及映射对象长度。其中子索引0 记录该PDO 具体映射的对象个数N，每个PDO 数据长度最多可达4*N 个字节，可同时映射一个或者多个对象。子索引1~N 则是映射内容。映射参数内容定义如下。
+位数	31	……	16	15	……	8	7	……	0
+含义	索引	子索引	对象长度
+索引和子索引共同决定对象在对象字典中的位置，对象长度指明该对象的具体位长，用十六进制表示，即：
+对象长度	位长
+08h	8位
+10h	16位
+20h	32位
+6.2.5 邮箱数据SDO
+EtherCAT 邮箱数据SDO 用于传输非周性数据，如通信参数的配置，伺服驱动器运行参数配置等。EtherCAT 的CoE 服务类型包括：1) 紧急事件信息；2)SDO 请求；3)SDO 响应；4)TxPDO；5)RxPDO；6)远程TxPDO 发送请求；7) 远程RxPDO 发送请求；8)SDO 信息。
+在AM600-2HCE模块中，目前支持2)SDO 请求；3)SDO 响应。
+6.2.6 分布时钟
+分布时钟可以使所有EtherCAT 设备使用相同的系统时间，从而控制各设备任务的同步执行。从站设备可以根据同步的系统时间产生同步信号。IAM600-2HCE模块仅支持DC 同步模式。同步周期由SYNC0 控制。
+6.2.7 寻址方式
+AM600-2HCE支持顺序寻址和设置寻址两种方式，主站可选择采用哪种寻址方式进行寻址。
+设置地址计算公式如下：
+设置地址值 = X1拨码值 + X16拨码值*16
+当进行设置寻址时，设置寻址可通过两个十六进制旋转开关确定或者上位机确定，方法如下：
+	当旋转开关为0时，设置地址为从机EEPROM中的值。
+	当旋转开关非0时，设置地址为码盘值。
+注：AM600后台设置地址范围为1-65534。
+6.2.8 基本特性
+1） 接口信息
+EtherCAT 网格电缆连接到带金属屏蔽层的网口端子上，分有输入(IN) 和输出(OUT) 接口。电气特性符合IEEE 802.3、ISO 8877 标准。
+ 
+针脚	定义	描述
+1	TX+	数据发送+
+2	TX-	数据发送-
+3	RX+	数据接收+
+4	NULL	空脚
+5	NULL	空脚
+6	RX-	数据接收-
+7	NULL	空脚
+8	NULL	空脚
+
+2） 拓扑连接
+EtherCAT 通信拓扑结构连接灵活，基本没有任何的限制，本伺服带有IN、OUT 接口，拓扑连接如下。
+线性连接：
+ 
+冗余环形连接：
+ 
+3） 通信电缆
+EtherCAT 通信线缆使用的是Ethernet Category 5(100BASE-TX) 网络线或者高强度的带屏蔽的网络线。在使用本伺服驱动器时，也需要使用带屏蔽的网络线，长度不超100M。屏蔽网络线会增强系统的抗干扰能力。
+4） EMC 标准
+本伺服驱动器执行的是最新国际EMC 标准：IEC/EN61800-3: 2004(Adjustable speed electrical power drive systems---part 3: EMC requirements and specific test methods)，以及国家标准GB/t12668.3。
+第七章 基本功能
+AM600-2HCE计数模块主要包括如下功能：
+功能名称	描述
+计数器类型	每一个通道可单独配置为线性计数器或环形计数器。
+计数模式	每一个通道可单独设置为AB相1倍频、AB相2倍频、AB相4倍频、脉冲+方向和CW/CCW型中的一种。
+预置功能	每一个通道可单独通过控制命令、DI端子，z输入信号中的一种预设计时器的初始值。
+清零功能	每一个通道可单独通过控制命令、DI端子，z输入信号中的一种清空计数器的值。
+测频功能	每一个通道可单独测量当前输入脉冲的频率值
+探针功能	每一个通道最多可配置两个探针端子，每一个探针端子可在特定的上升沿、下降沿到来时锁存当前时刻的计数值和DC时钟的时间
+比较功能	每一个通道最多可配置两个比较输出端子，每个端子可在设定的计数值输出特定时间的有效电平。
+多功能数字量输入	每一个模块配置4个数字量输入端子，功能可通过软件配置
+多功能数字量输出	每一个模块配置3个数字量输出端子，功能可通过软件配置
+
+ 
+7.1 基本设定
+7.1.1 运行前检查
+记录	序号	内容
+接线
+□	1	模块24V供电接线正确，0V和24V接线正确
+□	2	组态网线的接线顺序正确，保证网线X1 IN口输入，X2 OUT口输出
+□	3	ABZ脉冲输入信号接线正确
+□	4	X输入端子配线正确
+□	5	Y输出端子配线正确
+□	6	配线端子已进行绝缘处理。
+□	7	所有接线的受力在规定范围内。
+环境与机械
+□	1	模块内外部没有会造成信号线、电源线短路的电线头、金属屑等异物。
+□	2	模块未放置于可燃物体上。
+□	3	模块的机械安装必须可靠。
+
+7.1.2 组态与启动参数配置
+在主站编程软件环境中导入本模块的XML文件，然后在主站组态软件中根据模块的实际链接顺序配置相应的组态，具体配置方式请参考主站说明，在第八章简要介绍AM600、欧姆龙、倍福主站下的配置方式。
+模块的功能均通过启动参数下载在EtherCAT状态机由PreOP状态转换到OP状态时下载到模块生效，在OP状态下修改相关对象字典无效。
+索引	子索引	名称
+3100h	0	Counter type
+3103h	1	Ch0 maximum counter value
+3103h	2	Ch1 maximum counter value
+3104h	1	Ch0 minimum counter value
+3104h	2	Ch1 minimum counter value
+3105h	1	CH0 external input function selection
+3105h	2	CH1 external input function selection
+3106h	0	External input polarity selection
+3107h	1	Ch0 external output function selection
+3107h	2	Ch1 external output function selection
+3108h	0	External output polarity selection
+3109h	1	Ch0 filter
+3109h	2	Ch1 filter
+310ah	1	Ch0 pluse rate test time
+310ah	2	Ch1 pluse rate test time
+
+7.2 计数器类型
+每通道计数器的数据类型为32位有符号数。计数器计数类型可分为环形计数器和线性计数器。
+环形计数器
+环形计数器在最大值和最小值之间计数,当正向计数超过最大值之后跳转到最小值，当反向计数时小于最小值则跳转到最大值。
+ 
+线性计数器
+线性计数器在最大值和最小值之前计数，当正向计数达到最大值或反向计数达到最小值时停止计数，溢出标志有效。 
+ 
+相关参数
+索引 	子索引	说明
+3100h	0	计数器类型
+Bit0：Ch0计数器类型
+0：线型    1：环型
+Bit8：Ch1计数器类型
+0：线型    1：环型
+其他bit位：请参考相关章节
+3103h	1	Ch0通道计数器最大值
+3103h	2	Ch1通道计数器最大值
+3104h	1	Ch0通道计数器最小值
+3104h	2	Ch1通道计数器最小值
+6000h	1	Ch0通道计数器状态
+Bit5：计数器上溢标志
+0：无效    1：上溢
+Bit6：计数器下溢标志
+0：无效    1：下溢
+
+7.3 计数模式
+输入脉冲通过每个计数通道的An、Bn、Zn三个端子接入，计数通道支持支持AB相1倍频、AB相2倍频、AB相4倍频，脉冲加方向和CW/CCW几种计数形式。
+AB相脉冲
+AB相支持1倍频、2倍频、4倍频输入方式，各种脉冲的波形如下图所示：
+ 
+脉冲加方向
+A相输入脉冲信号，B相输入方向信号，不可接反。
+ CW/CCW
+ 
+相关参数
+索引	子索引	说明
+3100h	0	计数器类型
+Bit7-4：Ch0计数模式
+0：AB相1倍频    1：AB相2倍频
+3：AB相4倍频    3：脉冲+方向    4：CW/CCW
+Bit15-12：Ch1计数模式
+0：AB相1倍频    1：AB相2倍频
+3：AB相4倍频    3：脉冲+方向    4：CW/CCW
+其他bit位：请参考相关章节
+6002	1	Ch0通道当前计数值
+6002	2	Ch1通道当前计数值
+
+7.4计数方向控制
+每个计数通道可以设置A相优先或者B相优先，用于切换计数方向。
+AB相
+设置为A相优先时，当A相超前B相时计数器增加；反之A相滞后B相时计数器减小。
+脉冲+方向
+设置为A相优先时，B相输入高电平时计数器增加；反之B相输入低电平时计数器增加。
+CW/CCW
+设置为A相优先时，A相有计数则计数器增加；反之B相有计数时增加
+相关参数
+索引	子索引	说明
+3100h	0	计数器类型
+Bit1：Ch0通道计数方向
+0：A相优先    1：B相优先
+Bit9：Ch1通道计数方向
+0：A相优先    1：B相优先
+其他bit位：请参考相关章节
+6000h	1	Ch0通道状态字
+Bit7：计数方向
+    0：增计数    1：减计数
+6000h	2	Ch1通道状态字
+Bit7：计数方向
+    0：增计数    1：减计数
+
+7.5计数器使能与门控功能
+当门控功能无效时，仅通过控制命令使能计数器，当门控功能有效时，控制命令和门控输入信号同时有效时计数器使能计数。在计数器开始计数后，状态字相关标志位会有效。控制逻辑如下图所示：
+A) 不使用门控功能，以Ch0通道为例。
+ 
+B）使用门控功能，以Ch0通道为例。
+ 
+相关对象字典汇总：
+索引	子索引	说明
+3105h	1	Ch0通道数字量输入端子功能选择
+Bit7-0： Ch0通道X00端子功能选择
+5：门控    其他：参考其他章节
+Bit15-8：Ch0通道X01端子功能选择
+5：门控    其他：参考其他章节
+Bit23-16：Ch0通道X02端子功能选择
+5：门控    其他：参考其他章节
+Bit31-24：Ch0通道X03端子功能选择
+5：门控    其他：参考其他章节
+3105h	2	Ch1通道数字量输入端子功能选择
+Bit7-0： Ch1通道X10端子功能选择
+5：门控    其他：参考其他章节
+Bit15-8：Ch1通道X11端子功能选择
+5：门控    其他：参考其他章节
+Bit23-16：Ch1通道X12端子功能选择
+5：门控    其他：参考其他章节
+Bit31-24：Ch1通道X13端子功能选择
+5：门控    其他：参考其他章节
+7000h	1	Ch0通道计数器类型
+Bit0：Ch0计数器使能
+0：计数器禁止计数    1：计数器使能计数
+其他bit位：请参考相关章节
+7000h	2	Ch1通道计数器类型
+Bit0：Ch1计数器使能
+0：计数器禁止计数    1：计数器使能计数
+其他bit位：请参考相关章节
+6000h	1	Ch0通道计数器状态
+Bit0：Ch0通道计数器计数状态
+0：计数器停止计数    1：计数器正常计数
+其他bit位：参考其他章节
+6000h	2	Ch1通道计数器状态
+Bit0：Ch1通道计数器计数状态
+0：计数器停止计数    1：计数器正常计数
+其他bit位：参考其他章节
+
+7.6 计数器清0
+计数器清0方式有三种，分别是内部命令、外部数字量输入端子和z信号。以Ch0通道为例，控制逻辑如下图所示：
+A）内部命令
+ 
+B）外部数字量输入端子
+ 
+C）z信号
+ 
+相关对象字典汇总：
+索引 	子索引	说明
+7000h	1	Ch0通道计数器控制字
+Bit1：Ch0计数器清0
+0：无效    1：计数器清0
+Bit4：Ch0通道数字量输入端子清0使能
+0：无效    1：使能X端子清0功能
+Bit5：Ch0通道z端子清0使能
+0：无效    1：使能z端子清0功能
+Bit6：Ch0通道数字量输入端子清零完成标志（6001h:01.bit4）清除
+0：无效    1：清除完成标志
+Bit7：Ch0通道z端子清零完成标志（6001h:01.bit5）清除
+0：无效    1：清除完成标志
+其他bit位：请参考相关章节
+7000h	2	Ch1通道计数器控制字
+Bit1：Ch1计数器清0
+0：无效    1：计数器清0
+Bit4：Ch1通道数字量输入端子清0使能
+0：无效    1：使能X端子清0功能
+Bit5：Ch1通道z端子清0使能
+0：无效    1：使能z端子清0功能
+Bit6：Ch1通道数字量输入端子清零完成标志（6001h:02.bit4）清除
+0：无效    1：清除完成标志
+Bit7：Ch1通道z端子清零完成标志（6001h:02.bit5）清除
+0：无效    1：清除完成标志
+其他bit位：请参考相关章节
+3105h	1	Ch0通道数字量输入端子功能选择
+Bit7-0：Ch0通道X00端子功能选择
+3：清0    其他：参考其他章节
+Bit15-8：Ch0通道X01端子功能选择
+3：清0    其他：参考其他章节
+Bit23-16：Ch0通道X02端子功能选择
+3：清0    其他：参考其他章节
+Bit31-24：Ch0通道X03端子功能选择
+3：清0    其他：参考其他章节
+3105h	2	Ch1通道数字量输入端子功能选择
+Bit7-0： Ch1通道X10端子功能选择
+3：清0    其他：参考其他章节
+Bit15-8：Ch1通道X11端子功能选择
+3：清0    其他：参考其他章节
+Bit23-16：Ch1通道X12端子功能选择
+3：清0    其他：参考其他章节
+Bit31-24：Ch1通道X13端子功能选择
+3：清0    其他：参考其他章节
+6000	1	Ch0通道计数器状态
+Bit1：Ch0通道内部清0状态
+    0：无效    1：内部清0完成
+其他bit位：请参考相关章节
+6000	2	Ch1通道计数器状态
+Bit1：Ch1通道内部清0状态
+    0：无效    1：内部清0完成
+其他bit位：请参考相关章节
+6001	1	Ch0通道数字量输入状态
+Bit4：Ch0通道数字量输入端子清0功能使能
+0：无效    1：已经使能
+Bit5：Ch0通道z输入端子清0功能使能
+0：无效    1：已经使能
+Bit6：Ch0通道数字量输入端子清零完成标志
+0：无效    1：清0完成
+Bit7：Ch0通道z输入端子清零完成标志
+0：无效    1：清0完成
+6001	2	Ch1通道数字量输入状态
+Bit4：Ch1通道数字量输入端子清0功能使能
+0：无效    1：已经使能
+Bit5：Ch1通道z输入端子清0功能使能
+0：无效    1：已经使能
+Bit6：Ch1通道数字量输入端子清零完成标志
+0：无效    1：清0完成
+Bit7：Ch1通道z输入端子清零完成标志
+0：无效    1：清0完成
+
+7.7 计数器预置
+计数器预置方式有三种，分别是内部命令、外部数字量输入端子和z信号。控制逻辑如下图所示：
+A）通过内部控制命令，以Ch0通道为例
+
+ 
+B）通过数字量输入端子控制，以Ch0通道为例
+ 
+C）通过Z信号控制，以Ch0通道为例
+ 
+相关对象字典汇总：
+索引 	子索引	说明
+7000h	1	Ch0通道计数器控制字
+Bit3：Ch0计数器预置
+0：无效    1：计数器预置
+Bit8：Ch0通道数字量输入端子预置使能
+0：无效    1：使能X端子预置功能
+Bit9：Ch0通道z端子预置使能
+0：无效    1：使能z端子预置功能
+Bit10：Ch0通道数字量输入端子预置完成标志（6001h:01.bit10）清除
+0：无效    1：清除完成标志
+Bit11：Ch0通道z端子预置完成标志（6001h:01.bit11）清除
+0：无效    1：清除完成标志
+其他bit位：请参考相关章节
+7000h	2	Ch1通道计数器控制字
+Bit3：Ch1计数器预置
+0：无效    1：计数器预置
+Bit8：Ch1通道数字量输入端子预置使能
+0：无效    1：使能X端子预置功能
+Bit9：Ch1通道z端子预置使能
+0：无效    1：使能z端子预置功能
+Bit10：Ch1通道数字量输入端子预置完成标志（6001h:02.bit10）清除
+0：无效    1：清除完成标志
+Bit11：Ch1通道z端子预置完成标志（6001h:02.bit11）清除
+0：无效    1：清除完成标志
+其他bit位：请参考相关章节
+3105h	1	Ch0通道数字量输入端子功能选择
+Bit7-0： Ch0通道X00端子功能选择
+4：预置    其他：参考其他章节
+Bit15-8：Ch0通道X01端子功能选择
+4：预置    其他：参考其他章节
+Bit23-16：Ch0通道X02端子功能选择
+4：预置    其他：参考其他章节
+Bit31-24：Ch0通道X03端子功能选择
+4：预置    其他：参考其他章节
+3105h	2	Ch1通道数字量输入端子功能选择
+Bit7-0： Ch1通道X10端子功能选择
+4：预置    其他：参考其他章节
+Bit15-8：Ch1通道X11端子功能选择
+4：预置    其他：参考其他章节
+Bit23-16：Ch1通道X12端子功能选择
+4：预置    其他：参考其他章节
+Bit31-24：Ch1通道X13端子功能选择
+4：预置    其他：参考其他章节
+6000	1	Ch0通道计数器状态
+Bit3：Ch0通道内部预置状态
+    0：无效    1：内部预置完成
+其他bit位：请参考相关章节
+6000	2	Ch1通道计数器状态
+Bit3：Ch1通道内部预置状态
+    0：无效    1：内部预置完成
+其他bit位：请参考相关章节
+6001	1	Ch0通道数字量输入状态
+Bit8：Ch0通道数字量输入端子预置功能使能
+0：无效    1：已经使能
+Bit9：Ch0通道z输入端子预置功能使能
+0：无效    1：已经使能
+Bit10：Ch0通道数字量输入端子预置完成标志
+0：无效    1：预置完成
+Bit11：Ch0通道z输入端子预置完成标志
+0：无效    1：预置完成
+6001	2	Ch1通道数字量输入状态
+Bit8：Ch1通道数字量输入端子预置功能使能
+0：无效    1：已经使能
+Bit9：Ch1通道z输入端子预置功能使能
+0：无效    1：已经使能
+Bit10：Ch1通道数字量输入端子预置完成标志
+0：无效    1：预置完成
+Bit11：Ch1通道z输入端子预置完成标志
+0：无效    1：预置完成
+
+7.8 探针
+探针功能用于锁存特定信号发生时DC时间和计数器的值。每个通道最多可以设置两个探针端子，每一个探针均可实现上升沿锁存和下降沿锁存。以Ch0通道探针1为例，控制逻辑如下图所示：
+ 
+相关对象字典汇总
+索引 	子索引	说明
+3105	1	Ch0探针功能选择
+Bit7-0：X00端子功能选择
+1：探针1输入端子    其他：见其他章节
+Bit15-8：X01端子功能选择
+2：探针2输入端子    其他：见其他章节
+3105	2	Ch1探针功能选择
+Bit7-0：X10端子功能选择
+1：探针1输入端子    其他：见其他章节
+Bit15-8：X11端子功能选择
+2：探针2输入端子    其他：见其他章节
+7002h	1	Ch0探针功能控制字
+Bit0：探针1使能
+0：无效    1：使能
+Bit1：探针1触发模式
+0：单次    1：连续触发
+Bit2：探针1 触发信号选择
+0：X00端子    1：Z信号
+Bit4：探针1 上升沿使能
+0：无效    1：使能
+Bit5：探针1 下降沿使能
+0：无效    1：使能
+Bit8：探针2使能
+0：无效    1：使能
+Bit9：探针2触发模式
+0：单次    1：连续触发
+Bit10：探针2 触发信号选择
+0：X01端子    1：Z信号
+Bit12：探针2 上升沿使能
+0：无效    1：使能
+Bit13：探针2 下降沿使能
+0：无效    1：使能
+7002h	2	Ch1探针功能控制字
+Bit0：探针1使能
+0：无效    1：使能
+Bit1：探针1触发模式
+0：单次    1：连续触发
+Bit2：探针1 触发信号选择
+0：X10端子    1：Z信号
+Bit4：探针1 上升沿使能
+0：无效    1：使能
+Bit5：探针1 下降沿使能
+0：无效    1：使能
+Bit8：探针2使能
+0：无效    1：使能
+Bit9：探针2触发模式
+0：单次    1：连续触发
+Bit10：探针2 触发信号选择
+0：X11端子    1：Z信号
+Bit12：探针2 上升沿使能
+0：无效    1：使能
+Bit13：探针2 下降沿使能
+0：无效    1：使能
+6004h	1	Ch0通道探针功能状态字
+Bit0：探针1使能状态
+    0：无效    1：已经使能
+Bit1：探针1上升沿触发状态
+    0：无效    1：已经触发
+Bit2：探针1下降沿触发状态
+    0：无效    1：已经触发
+Bit5-3：探针1触发次数（连续模式有效）
+范围是0-3，连续模式下每触发一次加1
+Bit6：探针1触发信号
+0：X00端子    1：z信号
+Bit8：探针2使能状态
+    0：无效    1：已经使能
+Bit9：探针2上升沿触发状态
+    0：无效    1：已经触发
+Bit10：探针2下降沿触发状态
+    0：无效    1：已经触发
+Bit13-11：探针2触发次数（连续模式有效）
+范围是0-3，连续模式下每触发一次加1
+Bit14：探针2触发信号
+0：X10端子    1：z信号
+6004h	2	Ch1通道探针功能状态字
+Bit0：探针1使能状态
+    0：无效    1：已经使能
+Bit1：探针1上升沿触发状态
+    0：无效    1：已经触发
+Bit2：探针1下降沿触发状态
+    0：无效    1：已经触发
+Bit5-3：探针1触发次数（连续模式有效）
+范围是0-3，连续模式下每触发一次加1
+Bit6：探针1触发信号
+0：X10端子    1：z信号
+Bit8：探针2使能状态
+    0：无效    1：已经使能
+Bit9：探针2上升沿触发状态
+    0：无效    1：已经触发
+Bit10：探针2下降沿触发状态
+    0：无效    1：已经触发
+Bit13-11：探针2触发次数（连续模式有效）
+范围是0-3，连续模式下每触发一次加1
+Bit14：探针2触发信号
+0：X11端子    1：z信号
+6005h	1	Ch0通道探针1上升沿计数值
+6005h	2	Ch1通道探针1上升沿计数值
+6006h	1	Ch0通道探针1下降沿计数值
+6006h	2	Ch1通道探针1下降沿计数值
+6007h	1	Ch0通道探针2上升沿计数值
+6007h	2	Ch1通道探针2上升沿计数值
+6008h	1	Ch0通道探针2下降沿计数值
+6008h	2	Ch1通道探针2下降沿计数值
+600Ah	1	Ch0通道探针1上升沿DC时钟低32位
+600Ah	2	Ch0通道探针1上升沿DC时钟高32位
+600Ah	3	Ch1通道探针1上升沿DC时钟低32位
+600Ah	4	Ch1通道探针1上升沿DC时钟高32位
+600Bh	1	Ch0通道探针1下降沿DC时钟低32位
+600Bh	2	Ch0通道探针1下降沿DC时钟高32位
+600Bh	3	Ch1通道探针1下降沿DC时钟低32位
+600Bh	4	Ch1通道探针1下降沿DC时钟高32位
+600Ch	1	Ch0通道探针2上升沿DC时钟低32位
+600Ch	2	Ch0通道探针2上升沿DC时钟高32位
+600Ch	3	Ch1通道探针2上升沿DC时钟低32位
+600Ch	4	Ch1通道探针2上升沿DC时钟高32位
+600Dh	1	Ch0通道探针2下降沿DC时钟低32位
+600Dh	2	Ch0通道探针2下降沿DC时钟高32位
+600Dh	3	Ch1通道探针2下降沿DC时钟低32位
+600Dh	4	Ch1通道探针2下降沿DC时钟高32位
+
+7.9 比较功能
+每一个计数器最多可配置两个比较输出端子，以CH0通道比较输出1为例，比较通道的控制时序如下图所示：
+ 
+相关对象字典汇总
+索引 	子索引	说明
+3103	1	Ch0通道数字量输出功能选择
+Bit7-0：Y00功能选择
+1：第一路比较输出端子    其他：见其他章节
+Bit15-8：Y01功能选择
+    2：第二路比较输出端子    其他：见其他章节
+3103	2	Ch1通道数字量输出功能选择
+Bit7-0：Y10功能选择
+1：第一路比较输出端子    其他：见其他章节Bit15-8：Y11功能选择
+    2：第二路比较输出端子    其他：见其他章节
+7003	1	Ch0通道数字量输出功能控制
+Bit4：Ch0通道第一路比较输出通道使能
+0：无效    1：使能
+Bit5：Ch0通道第二路比较输出通道使能
+0：无效    1：使能
+Bit6：Ch0通道第一路比较输出通道完成标志（600e:01.bit）清0
+0：无效    1：清除完成标志
+Bit7：Ch0通道第二路比较输出通道完成标志（600e:01.bit）清0
+0：无效    1：清除完成标志
+7003	2	Ch1通道数字量输出功能控制
+Bit4：Ch1通道第一路比较输出通道使能
+0：无效    1：使能
+Bit5：Ch1通道第二路比较输出通道使能
+0：无效    1：使能
+Bit6：Ch1通道第一路比较输出通道完成标志（600e:01.bit）清0
+0：无效    1：清除完成标志
+Bit7：Ch1通道第二路比较输出通道完成标志（600e:01.bit）清0
+0：无效    1：清除完成标志
+7004	1	Ch0通道第一路比较输出设定计数值
+7004	2	Ch1通道第一路比较输出设定计数值
+7005	1	Ch0通道第二路比较输出设定计数值
+7005	2	Ch1通道第二路比较输出设定计数值
+7006	1	Ch0通道第一路比较输出设定输出时间
+7006	2	Ch1通道第一路比较输出设定输出时间
+7007	1	Ch0通道第二路比较输出设定输出时间
+7007	2	Ch1通道第二路比较输出设定输出时间
+600e	1	Ch0通道数字量输出端子输出状态
+Bit4：Ch0通道第一路比较输出使能状态
+0：比较输出未使能    1：已经使能
+Bit5：Ch0通道第二路比较输出使能状态
+0：比较输出未使能    1：已经使能
+Bit6：Ch0通道第一路比较输出产生信号
+0：无比较信号输出    1：已经完成输出信号
+Bit7：Ch0通道第二路比较输出产生信号
+0：无比较信号输出    1：已经完成输出信号
+600e	2	Ch1通道数字量输出端子输出状态
+Bit4：Ch1通道第一路比较输出使能状态
+0：比较输出未使能    1：已经使能
+Bit5：Ch1通道第二路比较输出使能状态
+0：比较输出未使能    1：已经使能
+Bit6：Ch1通道第一路比较输出产生信号
+0：无比较信号输出    1：已经完成输出信号
+Bit7：Ch1通道第二路比较输出产生信号
+0：无比较信号输出    1：已经完成输出信号
+
+7.10 脉冲频率测量
+通过测量在单位时间内的脉冲数计算出当前的脉冲频率。
+相关对象字典
+索引	子索引	说明
+310a	1	Ch0通道脉冲输入采样时间
+310a	2	Ch1通道脉冲输入采样时间
+6003	1	Ch0通道脉冲输入频率
+6003	2	Ch1通道脉冲输入频率
+
+7.11 输入滤波
+AM600-2HCE模块可以对An、Bn、Zn脉冲输入端子，Xn0、Xn1、Xn2、Xn3数字量输入端子进行滤波，以减少外部脉冲信号的杂波干扰。
+相关对象字典
+索引	子索引	说明
+3109	1	Ch0通道滤波时间
+3109	2	Ch1通道滤波时间
+
+7.12 数字量输入端子
+端子功能
+端子	可选功能	默认
+Xn0	0：普通输入
+1：探针1
+3：计数器清0
+4：计数器预置
+5：门控	探针1
+Xn1	0：普通输入
+2：探针2
+3：计数器清0
+4：计数器预置
+5：门控	探针2
+Xn2	0：普通输入
+3：计数器清0
+4：计数器预置
+5：门控	默认值是0
+Xn3	0：普通输入
+3：计数器清0
+4：计数器预置
+5：门控	默认值是0
+电平逻辑
+高电平逻辑：
+ 
+低电平逻辑
+ 
+相关对象字典
+索引	子索引	说明
+3105	1	Ch0通道数字量输入端子功能选择
+Bit7-0：X00 功能选择
+0:普通输入    1:探针端子1    3:清0
+4:预置    5:门控
+Bit15-8：X01 功能选择
+0:普通输入    2:探针端子2    3:清0
+4:预置    5:门控
+Bit23-16：X02功能选择
+0:普通输入    3:清0    4:预置    5:门控
+Bit31-24：X03功能选择
+0:普通输入    3:清0    4:预置    5:门控
+3105	2	Ch1通道数字量输入端子功能选择
+Bit7-0：X10 功能选择
+0:普通输入    1:探针端子1    3:清0
+4:预置    5:门控
+Bit15-8：X11 功能选择
+0:普通输入    2:探针端子2    3:清0
+4:预置    5:门控
+Bit23-16：X12功能选择
+0:普通输入    3:清0    4:预置    5:门控
+Bit31-24：X13功能选择
+0:普通输入    3:清0    4:预置    5:门控
+3106	0	数字量输入端子电平逻辑
+Bit0：X00端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit1：X01端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit2：X02端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit3：X03端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit8：X10端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit9：X11端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit10：X12端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit11：X13端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+6001	1	Ch0通道数字量输入状态
+Bit0：X00端子输入状态
+0：无效    1：有效
+Bit1：X01端子输入状态
+0：无效    1：有效
+Bit2：X02端子输入状态
+0：无效    1：有效
+Bit3：X03端子输入状态
+0：无效    1：有效
+6001	2	Ch1通道数字量输入状态
+Bit0：X10端子输入状态
+0：无效    1：有效
+Bit1：X11端子输入状态
+0：无效    1：有效
+Bit2：X12端子输入状态
+0：无效    1：有效
+Bit3：X13端子输入状态
+0：无效    1：有效
+
+7.13 数字量输出端子
+端子功能
+端子	可选功能	默认
+Yn0	0：普通输出
+1：比较输出1	1：比较输出1
+Yn1	0：普通输出
+2：比较输出2	2：比较输出2
+Yn2	0：普通输出 	0：普通输出
+电平逻辑
+高电平逻辑
+ 
+低电平逻辑
+ 
+相关对象字典
+索引 	子索引	说明
+3107	1	Ch0通道数字量输出端子功能选择
+Bit7-0：Y00 功能选择
+0:普通输出    1:第一路比较输出端子
+Bit15-8：Y01 功能选择
+0:普通输出    2:第二路比较输出端子
+Bit23-16：Y02功能选择
+0:普通输出
+3107	2	Ch1通道数字量输出端子功能选择
+Bit7-0：Y10 功能选择
+0:普通输出    1:第一路比较输出端子
+Bit15-8：Y11 功能选择
+0:普通输出    2:第二路比较输出端子
+Bit23-16：Y12功能选择
+0:普通输出
+3108	0	数字量输出端子电平逻辑
+Bit0：Y00端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit1：Y01端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit2：Y02端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit8：Y10端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit9：Y11端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+Bit10：Y12端子输入电平逻辑
+0：高电平逻辑    1：低电平逻辑
+600e	1	Ch0通道数字量输出状态
+Bit0：Y00端子输入状态
+0：无效    1：有效
+Bit1：Y01端子输入状态
+0：无效    1：有效
+Bit2：Y02端子输入状态
+0：无效    1：有效
+600e	2	Ch1通道数字量输出状态
+Bit0：Y10端子输入状态
+0：无效    1：有效
+Bit1：Y11端子输入状态
+0：无效    1：有效
+Bit2：Y12端子输入状态
+0：无效    1：有效
+
+第八章 故障与处理
+模块在发生故障时的故障代码如下，部分故障可以通过控制字将故障恢复。
+代码	原因	对策
+0002h	预设值错误	检查预设值是否超出最大值和最小值的范围
+0003h	比较值错误	检查比较值是否超出最大值和最小值的范围
+0010h	X输入端子预设功能设置错误	检查X输入端子功能设置是否是预设功能
+0011h	Y输出端子复位功能设置错误	检查X输入端子功能设置是否是复位功能
+0012h	X输入端子探针功能设置错误	检查X输入端子功能设置是否是探针功能
+0030h	Y输出端子为设置为比较功能	检查X输入端子功能设置是否是比较输出功能
+0050h	输入频率过载	判断输入频率是否超过200k
+0051h	线性计数器上溢	线性计数器计数达到最大值
+0052h	线性计数器下溢	线性计数器计数达到最小值
+如采用AM600后台功能块，功能块可检测如下错误
+代码	原因	对策
+1001h	预置类型超出范围	检查预置方式参数是否在可设置范围内。
+1002h	计数器未使能	检查使能计数器功能块是否正常运行
+使能计数器后，再执行相应功能块。
+1003h	探针参数不合理	检查探针id、探针类型、探针边沿、探针触发方式是否在可设置范围内
+1004h	比较通道参数错误	比较通道id、比较值等输入参数不在可设置范围
+1005h	未有错误清除	无故障时调用了复位功能块
+1006h	错误不能清除	错误不能清除，需要断电重启
+1100h	指令未配置相应PDO	执行的指令的功能需要配置相应的PDO，退出登录，在PDO映射配置栏，添加指令需要指令需要的PDO。
+
+相关对象字典如下：
+索引 	子索引	说明
+3200	1	Ch0通道发生故障时的故障代码
+3200	2	Ch1通道发生故障时的故障代码
+6000	1	Ch0通道状态字
+Bit8：模块故障状态
+    0：无故障    1：模块发生故障
+6000	2	Ch1通道状态字
+Bit8：模块故障状态
+    0：无故障    1：模块发生故障
+7000	1	Ch0通道控制字
+Bit12：故障复位命令
+    0：无效    1：复位故障
+7000	2	Ch1通道控制字
+Bit12：故障复位命令
+    0：无效    1：复位故障
+
+第九章 应用案例
+9.1 配合AM600主站
+9.1.1 功能块简介
+AM600主站可以通过功能块操作模块，功能块名称和功能如下表所示：
+功能块名称	描述
+HC_Counter_ETC	远端计数器使能、计数、测频
+HC_SetCompare_ETC	远端计数器设置比较一致输出 
+HC_Presetvalue_ETC	远端计数器预置值写入,包含软件预置、外部DI预置、Z相预置
+HC_TouchProbe_ETC	远端计数器读取锁存位置或者锁存时间功能
+HC_Reset_ETC	远端计数器错误复位
+每个功能块的使用说明请参考AM600后台软件，查找路径如下图所示
+ 
+HC_Counter_ECT
+     远端计数器使能、计数、测频、计数方向输出功能块。
+      
+属性	名称	类型	描述
+InOut	Counter	ENCODER_REF_ETC	计数器 
+Inputs	Enable	BOOL	使能计数器
+Outputs	CounterValue	LREAL	计数器数值
+	Frequency	UDINT	频率
+	Direction	BOOL	计数方向
+	Valid	BOOL	计数器使能状态
+	Busy	BOOL	功能块执行中
+	Error	BOOL	表示发生错误
+	ErrorID	COUNTER_ERROR	错误ID
+HC_SetCompare_ETC
+功能：远端计数器设置比较一致输出。
+       
+参数列表
+属性	名称	类型	描述
+InOut	Counter	ENCODER_REF_ETC	计数器 
+Inputs	Execute	BOOL	启动比较功能，上升沿有效
+	Abort	BOOL	终止比较，电平有效
+	Channel	BYTE	通道，范围（1,2）
+	CompareValue	LREAL	比较值
+	ImRefreshCycle	UINT	输出端口保持时间
+Outputs	Done	BOOL	比较完成
+	Busy	BOOL	功能块执行中
+	CommandAborted	BOOL	功能块终止执行
+	Error	BOOL	表示发生错误
+	ErrorID	COUNTER_ERROR	错误ID
+HC_Presetvalue_ETC
+功能：远端计数器预置值写入,包含软件预置、外部DI预置、Z相预置。
+       
+参数列表
+属性	名称	类型	描述
+InOut	Counter	ENCODER_REF_ETC	计数器 
+Inputs	Execute	BOOL	启动预置，上升沿有效
+	Abort	BOOL	终止预置，电平有效
+	TriggerType	BYTE	内部触发：0x01
+			DI触发：0x02
+			内部、DI触发：0x03
+			Z相触发：0x04
+			内部、Z相触发：0x05
+			DI、Z相触发：0x06
+			内部、DI、Z相触发：0x07
+	PresetValue	LREAL	计数器预置值
+Outputs	Done	BOOL	预置完成
+	Busy	BOOL	功能块执行中
+	CommandAborted	BOOL	功能块终止执行
+	Error	BOOL	表示发生错误
+	ErrorID	COUNTER_ERROR	错误ID
+HC_TouchProbe_ETC
+功能：远端计数器读取锁存位置或者锁存时间功能。
+       
+参数列表
+属性	名称	类型	描述
+InOut	Counter	ENCODER_REF_ETC	计数器 
+Inputs	Execute	BOOL	启动预置，上升沿有效
+	Abort	BOOL	终止探针，电平有效
+	ProbeId	WORD	探针ID,范围（1,2）
+	ProbeType	TOUCH_PROBE_TYPE	探针类型：时间、位置
+	EdgeType	TOUCH_PROBE_EDGE	边沿类型：上升沿、下降沿 
+	InputType	TOUCH_PROBE_INPUT	外部触发：Z相、DI端子
+	TriggerType	TOUCH_PROBE_TRIGGER	触发类型：连续、单次
+Outputs	Done	BOOL	探针捕获完成
+	Busy	BOOL	功能块执行中
+	CommandAborted	BOOL	探针捕获终止执行
+	Error	BOOL	表示发生错误
+	ErrorID	COUNTER_ERROR	错误ID
+	PositionPos	LREAL	上升沿锁存位置
+	PositionNeg	LREAL	下降沿锁存位置
+	TimePos	LINT	上升沿锁存时间
+	TimeNeg	LINT	下降沿锁存时间
+	CycleCount	WORD	边沿锁存计数
+HC_Reset_ETC
+功能：远端计数器计数错误清除。
+ 
+参数列表
+
+属性	名称	类型	描述
+InOut	Counter	ENCODER_REF_ETC	计数器 
+Inputs	Execute	BOOL	启动错误复位，上升沿有效
+Outputs	Done	BOOL	复位错误完成
+	Busy	BOOL	功能块执行中
+	Error	BOOL	表示发生错误
+	ErrorID	COUNTER_ERROR	错误ID
+9.1.2 应用例程
+1） 新建AM600工程，使能AM600 EtherCAT主站功能
+ 
+2）双击网络设备列表内AM600-2HCE模块，将其添加到组态中。
+ 
+3）设置计数模式为“AB相1倍频”。
+ 
+4）编写PLC程序
+ 
+5）登录，运行，变量enc_enable有效后，计数器开始计数。
+9.2 配合欧姆龙主站
+主流程
+ 
+9.2.1 准备工作
+1） 安装sysmac studio 的软件，建议安装V1.10 及以上版本。
+Sysmac studio V1.03 及以下版本，不能识别第三方伺服。
+Sysmac studio V1.09 补丁版、V 1.10 及以上的版本，不再校验xml 中厂家ID 与程序中的是否一致。
+Sysmac studio 软件1.05~1.09 版本，必须判断xml 文件中1018h 的三个参数与程序中的是否一致。
+2） 导入设备描述文件。
+将AM600-2HCE模块的配置文件放入如下路径：
+OMRON\Sysmac Studio\IODeviceProfiles\EsiFiles\UserEsiFiles
+首次将xml 文件放置在该路径下时，需要重启Sysmac studio 软件。
+3） 设置电脑的网络连接属性
+如果电脑与NJ 控制器选择USB 直连，则略过此步；
+如果电脑与NJ 控制器选择Ethernet 直接连接，则设置电脑的TCP/IP 属性，如下图所示：
+ 
+9.2.2 模块设置
+使用NJ 控制器必须通过拨码开关设定EtherCAT 通讯站号，建议设定根据实际物理连接顺序设定，以便于管理配置，不能将模块站号设置为0。设置方式请参考6.2.7节。
+9.2.3 欧姆龙NJ后台软件配置
+1） 新建工程
+ 
+设备：根据实际的NJ 控制器型号选择
+版本：新建1.09 及以上的版本
+2） 通信设置
+进入主界面后，在“控制器”、“通信设置”中设置电脑与NJ 控制器的连接方式。
+选择“USB—直接连接”，则直接进行“USB 通讯测试”，测试成功则可进行下一步；
+选择“Ethernet—直接连接”，则将IP 地址设置为NJ 控制的IP 地址：192.168.250.1，然后进行“Ethernet通讯测试”，测试成功则可进行下一步；
+ 
+3） 扫描设备
+① 将控制器切换到“在线，运行”模式
+ 
+右下角可观察控制器状态：在线，运行模式。
+注：新的NJ 控制器会出现提示：
+ 
+② 扫描设备，添加从站
+在“配置和设置”→“EtherCAT”→“主设备”处右击，选择“与物理网络配置比较和合并”，则控制器自动扫描网络内所有从站( 存在站号为0 的将报错)，扫描到后，在弹窗内，点击“应用物理网络配置”，则从站添加完成。在主页面能看到添加后的从站。
+ 
+
+ 
+
+ 
+4） 参数配置
+将控制器切换到离线模式，进行PDO 映射设置、DC 时钟设置。
+① PDO 映射设置
+ 
+② DC 时钟设置
+默认时钟为1ms，在离线状态下，在“任务设置”中可更改同步时钟( 主固定周期任务的周期)，在NJ 中，名称为“PDO 通信周期”，更改后，重新上电，切换到在线状态后，更改生效。
+ 
+5） 程序控制
+在NJ控制器下，没有现成的功能块，所有可能的操作请按照第7章内容讲述的控制逻辑编写PLC程序。
+6） 在线运行
+所有设置与编程完成后，切换到在线状态，执行下载到控制器。
+使用同步功能可比较当前程序与控制器中程序的差异，然后根据需要决定是下载到控制器，还是从控制器上传，也可不作更改。
+9.2.4 举例说明一些简单的动作
+待补充。
+9.3 配合倍福主站
+9.3.1 配合倍福公司的TwinCAT主站的简单配置
+1） 安装TwinCAT 软件
+与倍福官网的twinCAT 软件最高支持到win7 32 位系统，win7 64 位系统不支持。
+Windows xp 系统：建议安装tcat_2110_2230
+Windows 7 32 位系统系统：建议安装tcat_2110_2248
+NOTE 关于网卡，必须选择采用intel 芯片的百兆以太网卡。其他品牌的网卡，存在不支持EtherCAT 运行的风险。
+2） 把AM600-2HCE 的EtherCAT 配置文件拷贝到TwinCAT 安装目录：\TwinCAT\IO\EtherCAT。
+3） 打开TwinCAT
+ 
+4） 安装TwinCAT 网卡驱动
+ 
+打开上图菜单“Show Real Time Ethernet Compatible Devices…”，跳出下图对话框，在“Incompatble devices”栏选上本地网站后，点击“install”。安装完成后如下图在“Instaled and ready to use devices ”栏出现已经安装好的网卡。
+ 
+5） 设备搜索
+新建一个新的工程页后，开始搜索设备：
+ 
+  
+ 
+ 
+ 
+ 
+到这里设备已经搜索完成，如下图：
+ 
+6） 配置模块参数
+在“CoE-Online”界面，通过SDO通讯设置参数。
+ 
+7） 配置PDO
+配置RPDO：默认的RPDO为1700、1710
+配置TPDO：默认的TPDO为1B00、1B10,
+ 
+8） 编写PLC程序，激活配置并切换到运行模式。
+在倍福控制器下，没有现成的功能块，所有可能的操作请按照第7章内容讲述的控制逻辑编写PLC程序。
+9.3.2 举例说明使用一些简单的动作
+待补充
+第十章 对象字典详细说明
+10.1 通信参数
+Index	0x1000: Device type
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	Device type	UDINT	RO	NO	-		-
+说明：
+设备类型，本模块为自定义模块，设备类型为0
+Index	0x1001: Error register
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	Error register	USINT	RO	No	-	0	-
+说明
+0：无故障
+1:有故障(不包括状态机转换故障)
+Index	0x1008: Device name
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	Device name	STRING	ro	No	-		
+说明：
+设备名称为” AM600-2HCE”。
+Index	0x100A: Software version
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	Software version	STRING	ro	No	-	-	
+说明：
+形式为 xx.xx.xx.xx，分别表示v版本，b版本，d版本，F版本。
+Index	0x1018: Identity
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	RO	NO	-	4	-
+1	Vendor ID	UDINT	RO	NO	-	0x00100000	-
+2	Product code	UDINT	RO	NO	-	0x10F40502	-
+3	Revision	UDINT	RO	NO	-	-	-
+4	Serial number	UDINT	RO	NO	-	-	-
+说明
+Index	0x1700: Ch0 RPDO Mapping parameter 0
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value
+0	Highest sub-index supported	USINT	Rw	NO	0-15	4
+1	1st application object	UDINT	Rw	NO	-	0x70000110
+2	2nd application object	UDINT	Rw	NO	-	0x70010120
+3	3th application object	UDINT	Rw	NO	-	0x70020110
+4	4th application object	UDINT	Rw	NO	-	0x70030110
+5	5th application object	UDINT	Rw	NO	-	-
+6	6th application object	UDINT	Rw	NO	-	-
+7	7th application object	UDINT	Rw	NO	-	-
+8	8th application object	UDINT	Rw	NO	-	-
+9	9th application object	UDINT	Rw	NO	-	-
+10	10th application object	UDINT	Rw	NO	-	-
+11	11th application object	UDINT	Rw	NO	-	-
+12	12th application object	UDINT	Rw	NO	-	-
+13	13th application object	UDINT	Rw	NO	-	-
+14	14th application object	UDINT	Rw	NO	-	-
+15	15th application object	UDINT	Rw	NO	-	-
+说明：
+Index	0x1701: Ch0 RPDO Mapping parameter 1
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value
+0	Highest sub-index supported	USINT	Rw	NO	-	4
+1	1st application object	UDINT	Rw	NO	-	0x70040120
+2	2nd application object	UDINT	Rw	NO	-	0x70050120
+3	3th application object	UDINT	Rw	NO		0x70060120
+4	4th application object	UDINT	Rw	NO		0x70070110
+说明：
+Index	0x1710: Ch1 RPDO Mapping parameter 0
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value
+0	Highest sub-index supported	USINT	Rw	NO	0-15	4
+1	1st application object	UDINT	Rw	NO	-	0x70000210
+2	2nd application object	UDINT	Rw	NO	-	0x70010220
+3	3th application object	UDINT	Rw	NO	-	0x70020210
+4	4th application object	UDINT	Rw	NO	-	0x70030210
+5	5th application object	UDINT	Rw	NO	-	-
+6	6th application object	UDINT	Rw	NO	-	-
+7	7th application object	UDINT	Rw	NO	-	-
+8	8th application object	UDINT	Rw	NO	-	-
+9	9th application object	UDINT	Rw	NO	-	-
+10	10th application object	UDINT	Rw	NO	-	-
+11	11th application object	UDINT	Rw	NO	-	-
+12	12th application object	UDINT	Rw	NO	-	-
+13	13th application object	UDINT	Rw	NO	-	-
+14	14th application object	UDINT	Rw	NO	-	-
+15	15th application object	UDINT	Rw	NO	-	-
+说明：
+
+Index	0x1711: Ch1 RPDO Mapping parameter 1
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value
+0	Highest sub-index supported	USINT	Rw	NO	-	4
+1	1st application object	UDINT	Rw	NO	-	0x70040220
+2	2nd application object	UDINT	Rw	NO	-	0x70050220
+3	3th application object	UDINT	Rw	NO		0x70060220
+4	4th application object	UDINT	Rw	NO		0x70070210
+说明：
+
+Index	0x1B00: Ch0 TPDO Mapping Parameter 0
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value
+0	Highest sub-index supported	USINT	Rw	NO	0-15	6
+1	1st application object	UDINT	Rw	NO	-	0x60000110
+2	2nd application object	UDINT	Rw	NO	-	0x60020120
+3	3th application object	UDINT	Rw	NO		0x60030120
+4	4th application object	UDINT	Rw	NO		0x60010110
+5	5th application object	UDINT	Rw	NO		0x600E0110
+6	6th application object	UDINT	Rw	NO		0x32000110
+7	7th application object	UDINT	Rw	NO		
+8	8th application object	UDINT	Rw	NO		
+9	9th application object	UDINT	Rw	NO		
+10	10th application object	UDINT	Rw	NO		
+11	11th application object	UDINT	Rw	NO	-	-
+12	12th application object	UDINT	Rw	NO	-	-
+13	13th application object	UDINT	Rw	NO	-	-
+14	14th application object	UDINT	Rw	NO	-	-
+15	15th application object	UDINT	Rw	NO	-	-
+
+说明：
+Index	0x1B01: Ch0 TPDO Mapping Parameter 0
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value
+0	Highest sub-index supported	USINT	Rw	NO	-	2
+1	1st application object	UDINT	Rw	NO	-	
+2	2nd application object	UDINT	Rw	NO	-	
+3	3th application object	UDINT	Rw	NO		
+4	4th application object	UDINT	Rw	NO		
+5	5th application object	UDINT	Rw	NO		
+6	6th application object	UDINT	Rw	NO		
+7	7th application object	UDINT	Rw	NO		
+8	8th application object	UDINT	Rw	NO		
+9	9th application object	UDINT	Rw	NO		
+10	10th application object	UDINT	Rw	NO		
+说明：
+
+Index	0x1C00: Sync manager type
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	Sync manager type	USINT	RO	NO	-	4	-
+1	SM0	UDINT	RO	NO	-	1	-
+2	SM1	UDINT	RO	NO	-	2	-
+3	SM2	UDINT	RO	NO	-	3	-
+4	SM3	UDINT	RO	NO	-	4	-
+说明：
+表示SM通道的使用方式。SM0、SM1用于邮箱通信，SM2、SM3用于过程数据通信。
+Index	0x1C12: RxPDO assignment
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	Rw	NO	-	2	-
+1	Subindex 001	UINT	Rw	NO	-	0x1700	-
+2	Subindex 002	UINT	Rw	NO	-	0x1710	-
+3	Subindex 003	UINT	Rw	NO	-	-	-
+4	Subindex 004	UINT	Rw	NO	-	-	-
+说明：
+Index	0x1C13: TxPDO assignment
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	Rw	NO	0-10	2	-
+1	Subindex 001	UINT	Rw	NO	-	0x1B00	-
+2	Subindex 002	UINT	Rw	NO	-	0x1B10	-
+3	Subindex 003	UINT	Rw	NO	-	-	-
+4	Subindex 004	UINT	Rw	NO	-		-
+5	Subindex 005	UINT	Rw	NO	-	-	-
+6	Subindex 006	UINT	Rw	NO	-	-	-
+7	Subindex 007	UINT	Rw	NO	-	-	-
+8	Subindex 008	UINT	Rw	NO	-	-	-
+9	Subindex 009	UINT	Rw	NO	-	-	-
+10	Subindex 0010	UINT	Rw	NO	-	-	-
+说明
+
+Index	0x1C32: SM output parameter
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	RO	NO	-	32	-
+1	Sync mode	UINT	RW	NO	-	-	-
+2	Cycle time	UDINT	RW	NO	-	-	-
+4	Sync modes supported	UINT	RO	NO	-	-	-
+5	Minimum cycle time	UDINT	RO	NO	-	-	-
+6	Calc and copy time	UDINT	RO	NO	-	-	-
+9	Delay time	UDINT	RO	NO		-	-
+11	SM event missed counter	UDINT	RO	NO	-	-	-
+32	Sync error	BOOL	RO	NO	-	-	-
+说明：
+支持的同步类型：SM2，DC
+
+Index	0x1C33: SM input parameter
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	RO	NO	-	32	-
+1	Sync mode	UINT	RO	NO	-	-	-
+2	Cycle time	UINT	RO	NO	-	-	-
+4	Sync modes supported	UINT	RO	NO	-	-	-
+5	Minimum cycle time	UINT	RO	NO	-	-	-
+6	Calc and copy time	UINT	RO	NO	-	-	-
+9	Delay time	UINT	RO	NO	-	-	-
+11	SM event missed counter	UINT	RO	NO	-	-	-
+32	Sync error	UINT	RO	NO	-	-	-
+说明：
+用法同标准协议。
+Index	0x3010: Port 0 error counter
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	RO	NO	-	4	-
+1	Port 0 invalid frame counter	USINT	RO	NO	-	-	-
+2	Port 0 Rx error counter	USINT	RO	NO	-	-	-
+3	Port 0 forwarded Rx error counter	USINT	RO	NO	-	-	-
+4	Port 0 lost link counter	USINT	RO	NO	-	-	-
+说明：
+详见ET1100 datasheet。
+Index	0x3011: Port 1 error counter
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	RO	NO	-	4	-
+1	Port 1 invalid frame counter	USINT	RO	NO	-	-	-
+2	Port 1 Rx error counter	USINT	RO	NO	-	-	-
+3	Port 1 forwarded Rx error counter	USINT	RO	NO	-	-	-
+4	Port 1 lost link counter	USINT	RO	NO	-	-	-
+说明：
+详见ET1100 datasheet。
+Index	0x3012: ESC error counter
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	RO	NO	-	4	-
+1	ECAT Processing unit error counter	USINT	RO	NO	-	-	-
+2	PDI error cunter	USINT	RO	NO	-	-	-
+3	Watchdog counter process data	USINT	RO	NO	-	-	-
+4	Watchdog counter PDI	USINT	RO	NO	-	-	-
+说明：
+详见ET1100 datasheet
+Index	0x3016: Station address
+Sub
+Index	Name	Data
+type	Access	PDO Mapping	Setting Range	Initial value	Unit
+0	SubIndex 000	USINT	RO	NO	-	4	-
+1	Rotary switchs value 	UINT	RO	NO	-	0	
+2	Configured station address	UINT	RO	NO	-	0	-
+3	Configured station alias	UINT	RO	NO	-	0	
+4	Eeprom value	UINT	RO	NO	-	0	
+说明：
+Rotary switchs value：旋转开关的值
+Configured Station Address：ESC寄存器中0x0010:0x1011的值
+Configured Station alias：ESC中寄存器0x0012:0x0013的值
+Eeprom value：EEPROM中配置的值
+
+10.2 启动参数
+索引	0x3100:Counter type（计数器类型）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Counter type	UINT	RW	NO	0x2121
+说明：
+Counter Type
+位	描述	默认值
+0	Ch0计数器类型
+0：线型    1：环型	1
+1	Ch0 计数方向
+0：A相超前B相    1：B相超前A相	0
+3:2	保留	0
+7:4	Ch0 脉冲输入方式
+0：AB相1倍频    1：AB相2倍频    2：AB相4倍频
+3：脉冲+方向    4：CW/CCW	2
+15:8	Ch1 用法同上	
+
+
+索引	0x3103: Maximum counter value(计数通道最大计数值)
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 maximum counter value	DINT	RW	NO	2147483647
+2	Ch1 maximum counter value	DINT	RW	NO	2147483647
+
+索引	0x3104 Minimum counter value（计数通道最小计数值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 minimum counter value	DINT	RW	NO	2147483648
+2	Ch1 minimum counter value	DINT	RW	NO	2147483648
+ 
+索引	0x3105:External input function selection（外部数字量输入端子功能选择）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	CH0 external input function selection	UDINT	RW	NO	0x00000201
+2	CH1 external input function selection	UDINT	RW	NO	0x00000201
+说明：
+External Input Function Selection
+位	描述	默认值
+7:0	X00 功能选择
+0:普通输入    1:探针功能1
+3:清0    4:预置    5:门控	1
+15:8	X01 功能选择
+0:普通输入     2:探针功能2
+3:清0    4:预置    5:门控	2
+23:16	X02 功能选择
+0:普通输入
+3:清0    4:预置    5:门控	0
+31:24	X03 功能选择
+0:普通输入
+3:清0    4:预置    5:门控	0
+
+
+索引	0x3106: External input polarity selection（外部数字量输入端子电平逻辑选择）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	External input polarity selection	UINT	Rw	NO	0
+说明：
+每一个bit位代表一个数字量输入端子，该bit位为0代表正逻辑，为1代表反逻辑。
+Bit15-12	Bit11	Bit10	Bit9	Bit8	Bit7-4	Bit3	Bit2	Bit1	Bit0
+-	Ch1 X03	Ch1 X02	Ch1 X01	Ch1
+X00	-	Ch0 X03	Ch0 X02	Ch0 X01	Ch0
+X00
+
+索引	0x3107: External output function selection（外部数字量输出端子功能选择）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of Entries	USINT	RO	NO	2
+1	Ch0 external output function selection	UDINT	RW	NO	0x00000201
+2	Ch1 external output function selection	UDINT	RW	NO	0x00000201
+说明：
+每一个子索引代表一个通道，每一个子索引的bit位意义如下：
+位	描述	默认值
+7:0	Y00 功能选择
+0:普通输出    1:比较输出1	1
+15:8	Y01 功能选择
+0:普通输出    2:比较输出2	2
+23:16	Y02 功能选择
+0:普通输出	0
+31:24	保留	0
+
+索引	0x3108: External output polarity Selection（外部数字量输出端子电平逻辑选择）
+子索引	名称	数据类型	访问类型	能够映射	默认值
+0	External output polarity selection	UINT	Rw	NO	0
+说明：
+每一个bit位代表一个数字量输出端子，该bit位为0代表正逻辑，为1代表反逻辑。
+Bit15-11	Bit10	Bit9	Bit8	Bit7-3	Bit2	Bit1	Bit0
+-	Ch1
+Y03	Ch1
+Y02	Ch1
+Y01	-	Ch0
+Y02	Ch0
+Y01	Ch0
+Y00
+
+索引	0x3109: Filter（A相、B相、Z相、数字量输入端子滤波系数）
+子索引	名称	数据类型	访问类型	能否映射	默认值	单位
+0	Number of Entries	USINT	RO	NO	2	-
+1	Ch0 filter	UINT	RW	NO	2	Us
+2	Ch1 filter	UINT	RW	NO	2	Us
+
+索引	0x310A: Pluse rate test time（频率采样周期）
+子索引	名称	数据类型	访问类型	能否映射	默认值	单位
+0	Number of Entries	USINT	RO	NO	2	-
+1	Ch0 pluse rate test time	UINT	RW	NO	10	ms
+2	Ch1 pluse rate test time	UINT	RW	NO	10	ms
+10.3 PDO参数
+索引	0x6000: Encoder counter status(计数通道状态)
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 encoder counter status	UINT	RO	YES	0
+2	Ch1 encoder counter status	UINT	RO	YES	0
+
+说明：每一个子索引代表一个通道，每一个通道的意义如下：
+Bit位	描述
+0	计数器计数状态
+0：停止计数    1：计数器正常计数
+1	内部清0完成标志
+0：无效    1：清0完成
+2	保留
+3	内部预设状态
+0：无效    1：预设完成
+4	保留
+5	上溢标志
+    0：无效    1：上溢
+6	下溢标志
+0：无效    1：下溢
+7	计数方向
+0：方向相同    1：方向相反
+8	通道Error状态
+15-9	保留
+
+
+索引	0x6001: Reset/external input status（数字量输入端子状态）
+子索引	名称	数据类型	访问类型	映射类型	默认值
+0	Number of entries	USINT	RO	NO	4
+1	Ch0 reset/external input status	UINT	RO	YES	0
+2	Ch1 reset/external input status	UINT	RO	YES	0
+
+说明：每一个子索引代表一个通道，每一个通道的意义如下
+Bit位	描述
+0	Xn0状态
+1	Xn1状态
+2	Xn2状态
+3	Xn3状态
+4	外部复位使能
+5	Z复位使能
+6	外部复位完成
+7	Z复位完成
+8	外部预设使能
+9	Z预设使能
+10	外部预设完成
+11	Z预设完成
+15-12	保留
+
+索引	0x6002: Encoder present position（通道计数值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 encoder present position	DINT	RO	YES	0
+2	Ch1 encoder present position	DINT	RO	YES	0
+
+索引	0x6003: Pulse rate（通道频率值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of Entries	USINT	RO	NO	2
+1	Ch0 pulse rate	UDINT	RO	YES	0
+2	Ch1 pulse rate	DDINT	RO	YES	0
+
+索引	0x6004: Touch probe status（探针状态）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 touch probe status	UINT	RO	YES	0
+2	Ch1 touch probe status	UINT	RO	YES	0
+说明：
+Bit位	描述
+0	探针1使能
+0：探针1不使能    1：探针1使能
+1	探针1上升沿锁存执行
+0：上升沿锁存未执行    1：上升沿锁存已执行
+2	探针1 下降沿锁存执行
+0：下降沿锁存未执行    1：下降沿锁存已执行
+3	NA
+4	NA
+5	NA
+6	探针1 触发信号选择
+0：Xn0    1：Z信号
+7	NA
+8	探针2使能：
+0：探针2不使能    1：探针2使能
+9	探针2上升沿锁存执行
+0：上升沿锁存未执行    1：上升沿锁存已执行
+10	探针2 下降沿锁存执行
+0：下降沿锁存未执行    1：下降沿锁存已执行
+11	NA
+12	NA
+13	NA
+14	探针2 触发信号选择
+0：Xn1    1：Z信号
+15	NA
+
+
+索引	0x6005: Touch probe pos1 pos value（探针1 上升沿计数值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 touch probe pos1 pos value	DINT	RO	YES	0
+2	Ch1 touch probe pos1 pos value	DINT	RO	YES	0
+
+索引	0x6006: Touch probe pos1 neg value（探针1 下降沿计数值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 touch probe pos1 neg value	DINT	RO	YES	0
+2	Ch1 touch probe pos1 neg value	DINT	RO	YES	0
+
+索引	0x6007: Touch probe pos2 pos value（探针2 上升沿计数值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 touch probe pos2 pos value	DINT	RO	YES	0
+2	Ch1 touch probe pos2 pos value	DINT	RO	YES	0
+
+
+索引	0x6008: Touch probe pos2 neg value（探针2 下降沿计数值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 Touch probe pos2 neg value	DINT	RO	YES	0
+2	Ch1 Touch probe pos2 neg value	DINT	RO	YES	0
+
+索引	0x6009: Time stamp（时间戳）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	4
+1	Ch0 time stamp 1	UDINT	RO	YES	0
+2	Ch0 time stamp 2	UDINT	RO	YES	0
+3	Ch1 time stamp 1	UDINT	RO	YES	0
+4	Ch1 time stamp 2	UDINT	RO	YES	0
+
+索引	0x600a: Touch probe pos1 pos time stamp（探针1 上升沿时间戳）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 touch probe pos1 pos time stamp	UDINT	RO	YES	0
+2	Ch1 touch probe pos1 pos time stamp	UDINT	RO	YES	0
+
+索引	0x600b Touch probe pos1 neg time stamp（探针1下降沿时间戳）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 touch probe pos1 neg time stamp	UDINT	RO	YES	0
+2	Ch1 touch probe pos1 neg time stamp	UDINT	RO	YES	0
+
+索引	0x600c: Touch probe pos2 pos time stamp（探针2 上升沿时间戳）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 touch probe pos2 pos time stamp	UDINT	RO	YES	0
+2	Ch1 touch probe pos2 pos time stamp	UDINT	RO	YES	0
+
+索引	0x600d: Touch probe pos2 neg time stamp（探针2 下降沿时间戳）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 Touch probe pos2 neg time stamp	UDINT	RO	YES	0
+2	Ch1 Touch probe pos2 neg time stamp	UDINT	RO	YES	0
+
+
+索引	0x600e: DO output status（数字量输出端子输出状态）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 DO output status	UINT	RO	YES	0
+2	Ch1 DO output status	UINT	RO	YES	0
+说明：
+
+Bit位	说明
+0	Yn0输出状态
+1	Yn1输出状态
+2	Yn2输出状态
+3	保留
+4	比较1使能
+5	比较2使能
+6	比较1输出有效
+7	比较2输出有效
+15-8	保留
+
+
+
+索引	0x7000: Encoder counter operation command（通道控制字）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of Entries	USINT	RO	NO	2
+1	Ch0 encoder counter operation command	UINT	Rw	YES	0
+2	Ch1 encoder counter operation command	UINT	Rw	YES	0
+说明：每一个子索引代表一个通道，每个通道的解释如下，
+Bit位	说明
+0	计数器使能
+0：禁止    1：使能
+1	计数器清0
+2	保留
+3	内部预设
+4	外部清0使能
+5	Z信号清0使能
+6	外部清0完成清除
+7	Z信号清零完成清除
+8	外部预设使能
+9	Z信号预设使能
+10	外部预设完成清除
+11	Z信号预设完成清除
+12	故障复位
+15-13	保留
+
+索引	0x7001: Preset command value（通道计数器预设值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 preset command value	DINT	Rw	YES	0
+2	Ch1 preset command value	DINT	Rw	YES	0
+
+索引	0x7002: Touch probe function（探针功能）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 latch function	UINT	RW	YES	0
+2	Ch1 latch function	UINT	RW	YES	0
+说明：每一个子索引代表一个通道，每个通道的解释如下，
+Bit位	描述
+0	探针1使能：
+0：探针1不使能    1：探针1使能
+1	探针1 触发模式
+0：单次触发，只在触发信号第一次有效时触发    1：连续触发
+2	探针1 触发信号选择
+0：Xn0端子    1：Z信号
+3	NA
+4	探针1 上升沿使能
+0：上升沿不锁存    1：上升沿锁存
+5	探针1 下降沿使能
+0：下降沿不锁存    1：下降沿锁存
+6	NA
+7	NA
+8	探针2使能：
+0：探针2不使能    1：探针2使能
+9	探针2 触发模式
+0：单次触发，只在触发信号第一次有效时触发    1：连续触发
+10	探针2触发信号选择
+0：Xn0端子    1：Z信号
+11	NA
+12	探针2 上升沿使能
+0：上升沿不锁存    1：上升沿锁存
+13	探针2 下降沿使能
+0：下降沿不锁存    1：下降沿锁存
+14	NA
+15	NA
+
+索引	0x7003: DO output function（数字量输出端子功能选择）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 DO output function	UINT	RW	YES	0
+2	Ch1 DO output function	UINT	RW	YES	0
+说明：
+当DO功能选择普通DO输出时
+Bit位	说明
+0	Yn0输出
+1	Yn1输出
+2	Yn2输出
+3	保留
+4	比较1使能
+5	比较2使能
+6	比较1完成标志清0
+7	比较2完成标志清0
+15-8	保留
+
+索引	0x7004: Compare command value 1（第一路比较输出值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 compare command value 1	DINT	RW	YES	0
+2	Ch1 compare command value 1	DINT	RW	YES	0
+
+索引	0x7005: Compare command value 2（第二路比较输出值）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 compare command value 2	DINT	RW	YES	0
+2	Ch1 compare command value 2	DINT	RW	YES	0
+说明：
+
+索引	0x7006: Compare command time 1（第一路比较输出时间）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 compare command time 1	UINT	RW	YES	0
+2	Ch1 compare command time 1	UINT	RW	YES	0
+说明：
+索引	0x7007: Compare command time 2（第二路比较输出时间）
+子索引	名称	数据类型	访问类型	能否映射	默认值
+0	Number of entries	USINT	RO	NO	2
+1	Ch0 compare command time 2	UINT	RW	YES	0
+2	Ch1 compare command time 2	UINT	RW	YES	0
+说明
+
